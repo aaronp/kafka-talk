@@ -1,7 +1,7 @@
 [back](README.md)
 # Topic Partitions
 
-At its core, data in Kafka is arranged into key/value pairs under a particular Kafka topic (which is just a name).
+At its core, data in Kafka is arranged into key/value pairs under a particular Kafka topic (which is just a name) and stored in [batches](https://kafka.apache.org/documentation/#messageformat).
 
 Kafka topics are created with a number of replicas (redundant copies) and partitions (shards).
 

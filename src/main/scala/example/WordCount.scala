@@ -25,35 +25,14 @@ object WordCount {
 
     val dataStream = builder.stream[String, String]("streams-plaintext-input")
       .flatMapValues(value => java.util.Arrays.asList(value.toLowerCase(Locale.getDefault()).split("\\W+")))
-//      .flatMapValues { value =>
-//        val list = value.toLowerCase(Locale.getDefault).split("\\W+").toList
-//        list
-//    }
       .groupBy {
-      (key, value) => value
-    }.count(
+        (key, value) => value
+      }.count(
       Materialized.as[String, Long, KeyValueStore[Bytes, Array[Byte]]]("counts-store")
     ).toStream.to("streams-wordcount-output", Produced.`with`(Serdes.String, Serdes.Long))
 
     val topology = builder.build
     val streams = new KafkaStreams(topology, props)
-    val latch = new CountDownLatch(1)
-
-    // attach shutdown handler to catch control-c
-    Runtime.getRuntime.addShutdownHook(new Thread("streams-shutdown-hook") {
-      @Override def run(): Unit = {
-        streams.close
-        latch.countDown
-      }
-    })
-
-    try {
-      streams.start
-      latch.await
-    } catch {
-      case NonFatal(_) => System.exit(1)
-    }
-
-    System.exit(0)
+    streams
   }
 }

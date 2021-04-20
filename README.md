@@ -3,7 +3,8 @@
 ## About
 
 Apache [Kafka](https://kafka.apache.org/) was originally created at LinkedIn and open-sourced in 2012 as
-a high-throughput, low-latency horizontally scalable message bus that was optimized for writes.
+a highly-available, fault-tolerant, high-throughput, low-latency, horizontally scalable message bus optimized for writes.
+
 The creators subsequently spun-off [Confluent](https://www.confluent.io/hub/) to provide enterprise support, associated products and consultancy services for Kafka.  
 
 Technically speaking, Kafka itself is a distributed commit log, and its inner workings, design, and [speed](https://medium.com/@sunny_81705/what-makes-apache-kafka-so-fast-71b477dcbf0) have been written about
@@ -24,6 +25,14 @@ See [here](topicPartitions.md)
 
 See [client APIs](clientApis.md)
 
+## Serde
 
+See [Serde](serde.md)
 
+## AVRO / Schema Registry
 
+See [schemaRegistry](schemaRegistry.md)
+
+## Securing Kafka
+
+See [securingKafka](securingKafka.md)
