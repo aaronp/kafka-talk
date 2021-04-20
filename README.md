@@ -27,12 +27,12 @@ See [client APIs](clientApis.md)
 
 ## Serde
 
-See [Serde](serde.md)
+See [serde](serde.md)
 
 ## AVRO / Schema Registry
 
-See [schemaRegistry](schemaRegistry.md)
+See [schema registry](schemaRegistry.md)
 
 ## Securing Kafka
 
-See [securingKafka](securingKafka.md)
+See [securing kafka](securingKafka.md)
