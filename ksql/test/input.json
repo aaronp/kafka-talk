@@ -1,0 +1,19 @@
+{
+  "inputs": [
+    {"topic": "customers", "value": {"id": 1, "name": "Arn", "version": 1}},
+    {"topic": "customers", "value": {"id": 1, "name": "Foo", "version": 3}},
+    {"topic": "customers", "value": {"id": 1, "name": "Aaron", "version": 4}},
+    {"topic": "customers", "value": {"id": 1, "name": "Out of Order", "version": 2}},
+
+
+    {"topic": "customers", "value": {"id": 2, "name": "George", "version": 2}},
+    {"topic": "customers", "value": {"id": 2, "name": "G", "version": 1}},
+
+
+    {"topic": "customers", "value": {"id": 3, "name": "one", "version": 100}},
+    {"topic": "customers", "value": {"id": 3, "name": "two", "version": 200}},
+    {"topic": "customers", "value": {"id": 3, "name": "three", "version": 300}},
+
+    {"topic": "customers", "value": {"id": 4, "name": "lonely", "version": 1}}
+  ]
+}

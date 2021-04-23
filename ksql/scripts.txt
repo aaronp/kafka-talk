@@ -1,0 +1,72 @@
+
+CREATE STREAM CUSTOMERS (id INT KEY, name VARCHAR, version INT)
+    WITH (KAFKA_TOPIC='customers',
+          PARTITIONS=1,
+          VALUE_FORMAT='protobuf');
+
+CREATE TABLE CUSTOMER_VERSIONS AS
+	SELECT id, 
+	       MIN(version) AS MIN_VERSION,
+	       MAX(version) AS MAX_VERSION
+	FROM CUSTOMERS
+	GROUP BY id
+	EMIT CHANGES;
+
+CREATE TABLE CUSTOMER_LATEST AS
+    SELECT c.id,
+           LATEST_BY_OFFSET(c.name) AS name,
+           LATEST_BY_OFFSET(c.version) AS version,
+           LATEST_BY_OFFSET(v.MAX_VERSION) AS maxversion
+    FROM CUSTOMERS AS c
+	LEFT JOIN CUSTOMER_VERSIONS v ON c.id = v.id 
+	WHERE c.version >= v.MAX_VERSION
+    GROUP BY c.id
+    EMIT CHANGES;
+
+
+INSERT INTO CUSTOMERS (id, name, version) VALUES (1, 'Arn', 1);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (1, 'Foo', 3);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (1, 'Out of Order', 2);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (1, 'Aaron', 4);
+
+INSERT INTO CUSTOMERS (id, name, version) VALUES (2, 'George', 2);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (2, 'G', 1);
+
+INSERT INTO CUSTOMERS (id, name, version) VALUES (3, 'Eleanor', 100);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (3, 'Eli', 20);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (3, 'Nora', 30);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (3, 'mistake', 31);
+
+INSERT INTO CUSTOMERS (id, name, version) VALUES (4, 'one', 100);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (4, 'two', 200);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (4, 'three', 300);
+
+INSERT INTO CUSTOMERS (id, name, version) VALUES (5, 'lonely', 1);
+
+INSERT INTO CUSTOMERS (id, name, version) VALUES (6, 'too', 100);
+INSERT INTO CUSTOMERS (id, name, version) VALUES (6, 'two', 101);
+
+INSERT INTO CUSTOMERS (id, name, version) VALUES (6, 'two', 101);
+
+
+
+PRINT CUSTOMER_VERSIONS FROM BEGINNING LIMIT 6;
+PRINT CUSTOMER_LATEST FROM BEGINNING LIMIT 6;
+
+
+CREATE TABLE CUSTOMER_LATEST AS
+	SELECT c.id, c.name, c.version
+	FROM CUSTOMERS AS c
+	JOIN CUSTOMER_VERSIONS v ON c.id = v.id 
+	WHERE c.version >= v.MAX_VERSION
+	EMIT CHANGES;
+
+CREATE STREAM CUSTOMERS_SORTED_2 AS
+  SELECT c.id, c.name, c.version
+  FROM CUSTOMERS AS c
+  LEFT JOIN CUSTOMER_VERSIONS ON c.id = CUSTOMER_VERSIONS.id 
+  WHERE c.version >= CUSTOMER_VERSIONS.MAX_VERSION
+  EMIT CHANGES;
+
+PRINT CUSTOMERS_SORTED_2 FROM BEGINNING LIMIT 6;
+

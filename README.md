@@ -36,3 +36,9 @@ See [schema registry](schemaRegistry.md)
 ## Securing Kafka
 
 See [securing kafka](securingKafka.md)
+
+## Examples
+
+There are a couple runnable examples so far in:
+ * [ksql](ksql/readme.md)
+ * [kstreams](kstreams/readme.md) 
